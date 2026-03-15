@@ -1,0 +1,37 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - gh-pages
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          submodules: true  # 【重要】如果你使用了 git 子模块主题，必须开启这个
+          fetch-depth: 0    # 【重要】获取所有历史提交，防止某些主题报错
+
+      - name: Install Dependencies 🔧
+        run: |
+          npm install
+          # 如果主题也是通过 npm 安装的，通常上面这就够了
+          # 如果有额外的 hexo 插件安装需求，可以在这里加
+
+      - name: Generate Static Files 🏗️
+        run: |
+          npx hexo clean
+          npx hexo generate
+        # 注意：Hexo 默认命令是 hexo generate，不是 npm run build
+        # 除非你的 package.json 里写了 "build": "hexo generate"
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages 
+          FOLDER: public # Hexo 默认输出目录，正确！
+          CLEAN: true    # 自动清理旧文件，保持仓库整洁
