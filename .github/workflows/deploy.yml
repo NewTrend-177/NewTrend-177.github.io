@@ -31,7 +31,7 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages 
           FOLDER: public # Hexo 默认输出目录，正确！
           CLEAN: true    # 自动清理旧文件，保持仓库整洁
